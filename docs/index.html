@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diary - Your Personal Secure Journal</title>
+  <style>
+    :root {
+      --bg: #fafaf9;
+      --fg: #1c1917;
+      --muted: #78716c;
+      --accent: #3b6fa0;
+      --accent-light: #e0eaf4;
+      --card-bg: #ffffff;
+      --card-border: #e7e5e4;
+      --hero-bg: linear-gradient(135deg, #3b6fa0 0%, #2c5282 50%, #1a365d 100%);
+      --section-alt: #f5f3f0;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+      --shadow-lg: 0 4px 6px rgba(0,0,0,0.06), 0 12px 24px rgba(0,0,0,0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(250,250,249,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0 2rem;
+    }
+    nav .inner {
+      max-width: 1100px; margin: auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    nav .brand {
+      display: flex; align-items: center; gap: .5rem;
+      font-weight: 700; font-size: 1.1rem; color: var(--fg);
+      text-decoration: none;
+    }
+    nav .brand img { width: 28px; height: 28px; border-radius: 6px; }
+    nav ul { list-style: none; display: flex; gap: 1.5rem; }
+    nav a { color: var(--muted); text-decoration: none; font-size: .9rem; transition: color .2s; }
+    nav a:hover { color: var(--fg); }
+
+    /* ---- HERO ---- */
+    .hero {
+      background: var(--hero-bg);
+      color: #fff;
+      padding: 8rem 2rem 5rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3.2rem; font-weight: 800; letter-spacing: -.02em;
+      margin-bottom: .25rem;
+    }
+    .hero .subtitle {
+      font-size: 1.15rem; opacity: .85; margin-bottom: 2rem;
+      max-width: 560px; margin-left: auto; margin-right: auto;
+    }
+    .hero .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: .35rem 1rem;
+      font-size: .8rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero .platforms {
+      display: flex; justify-content: center; gap: 2rem;
+      font-size: .85rem; opacity: .75; margin-top: 1.5rem;
+    }
+    .hero .platforms span::before {
+      content: ''; display: inline-block; width: 6px; height: 6px;
+      background: rgba(255,255,255,.6); border-radius: 50%;
+      margin-right: .45rem; vertical-align: middle;
+    }
+
+    /* ---- SCREENSHOT SHOWCASE ---- */
+    .showcase {
+      max-width: 1100px; margin: -3rem auto 0; padding: 0 2rem;
+      position: relative; z-index: 10;
+    }
+    .showcase img {
+      width: 100%;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--card-border);
+    }
+
+    /* ---- SECTIONS ---- */
+    section { padding: 5rem 2rem; }
+    section.alt { background: var(--section-alt); }
+    .container { max-width: 1100px; margin: auto; }
+    .section-label {
+      font-size: .75rem; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--accent); font-weight: 700; margin-bottom: .5rem;
+    }
+    .section-title {
+      font-size: 2rem; font-weight: 700; margin-bottom: .5rem;
+    }
+    .section-desc {
+      color: var(--muted); max-width: 560px; margin-bottom: 2.5rem;
+    }
+
+    /* ---- FEATURES GRID ---- */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow .2s, transform .2s;
+    }
+    .feature-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .feature-card .icon {
+      width: 40px; height: 40px;
+      background: var(--accent-light);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; margin-bottom: 1rem;
+    }
+    .feature-card h3 { font-size: 1.05rem; margin-bottom: .4rem; }
+    .feature-card p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    /* ---- SCREENSHOT ROWS ---- */
+    .screenshot-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem; align-items: center; margin-bottom: 4rem;
+    }
+    .screenshot-row:last-child { margin-bottom: 0; }
+    .screenshot-row.reverse { direction: rtl; }
+    .screenshot-row.reverse > * { direction: ltr; }
+    .screenshot-row img {
+      width: 100%;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--card-border);
+    }
+    .screenshot-row .text h3 {
+      font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem;
+    }
+    .screenshot-row .text p {
+      color: var(--muted); font-size: .95rem; line-height: 1.7;
+    }
+
+    /* ---- DOWNLOADS ---- */
+    .download-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    a.download-card {
+      display: block; text-decoration: none; color: var(--fg);
+    }
+    .download-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: box-shadow .2s, transform .2s;
+    }
+    .download-card:hover {
+      box-shadow: var(--shadow-lg); transform: translateY(-2px);
+    }
+    .download-card .os { font-size: 2rem; margin-bottom: .5rem; }
+    .download-card h3 { margin-bottom: .25rem; }
+    .download-card p { color: var(--muted); font-size: .85rem; margin-bottom: 1rem; }
+    .download-card .format {
+      display: inline-block;
+      background: var(--accent-light); color: var(--accent);
+      padding: .25rem .75rem; border-radius: 6px;
+      font-size: .8rem; font-weight: 600;
+    }
+
+    /* ---- SHAREWARE NOTICE ---- */
+    .license-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 2.5rem 3rem;
+      max-width: 800px;
+      box-shadow: var(--shadow);
+    }
+    .license-box p {
+      color: var(--muted); font-size: .92rem; line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .license-box p:first-child {
+      color: var(--fg); font-weight: 600; font-size: 1rem;
+    }
+    .license-box p:last-child { margin-bottom: 0; }
+
+    /* ---- FOOTER ---- */
+    footer {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      border-top: 1px solid var(--card-border);
+      color: var(--muted);
+      font-size: .85rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.2rem; }
+      .screenshot-row { grid-template-columns: 1fr; }
+      .screenshot-row.reverse { direction: ltr; }
+      nav ul { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="inner">
+    <a href="#" class="brand">
+      <img src="i/about.png" alt="Diary icon">
+      Diary
+    </a>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#screenshots">Screenshots</a></li>
+      <li><a href="#download">Download</a></li>
+      <li><a href="#license">License</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="badge">Shareware &mdash; Free to Use</div>
+  <h1>Diary &mdash; &#xC77C;&#xAE30;</h1>
+  <p class="subtitle">
+    A beautifully simple, secure personal journal. Write freely, attach photos,
+    and keep your memories safe with password protection and AES-256 encryption.
+  </p>
+  <div class="platforms">
+    <span>Linux</span>
+    <span>Windows</span>
+    <span>macOS</span>
+  </div>
+</section>
+
+<!-- Main Screenshot -->
+<div class="showcase">
+  <img src="i/entry_with_photo.png" alt="Diary app showing a journal entry with an embedded photo">
+</div>
+
+<!-- Features -->
+<section id="features">
+  <div class="container">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">Everything you need. Nothing you don't.</h2>
+    <p class="section-desc">
+      Diary keeps things simple: a calendar, a rich text editor, and strong encryption.
+      No cloud. No accounts. Just your words, on your machine.
+    </p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">&#x1F512;</div>
+        <h3>Password Protected</h3>
+        <p>Lock your diary with a master password. Auto-lock kicks in after a configurable period of inactivity.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F5D3;</div>
+        <h3>Calendar Navigation</h3>
+        <p>Browse entries by date with an intuitive monthly calendar. Dots mark days with entries so you never lose track.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x270F;</div>
+        <h3>Rich Text Editor</h3>
+        <p>Bold, italic, lists, headings, colors, and more. Write expressively with a full formatting toolbar.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F4F7;</div>
+        <h3>Photo Attachments</h3>
+        <p>Embed images directly in your entries. Attach multiple photos to capture every moment of your day.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F50D;</div>
+        <h3>Full-Text Search</h3>
+        <p>Instantly search across all entries by content, title, or date. Find any memory in seconds.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F310;</div>
+        <h3>Multilingual</h3>
+        <p>Supports 14 languages including English, Korean, Japanese, Chinese, French, German, and more. Dates adapt to your locale.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F6E1;</div>
+        <h3>AES-256 Encryption</h3>
+        <p>Your entries are encrypted with AES-256. Data stays local &mdash; no cloud, no telemetry, no tracking.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F3A8;</div>
+        <h3>Light &amp; Dark Themes</h3>
+        <p>Choose the look that suits you. Switch between light and dark themes from Settings.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F4BB;</div>
+        <h3>Cross-Platform</h3>
+        <p>Runs natively on Linux, Windows, and macOS. Same experience everywhere, built with Flutter.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Screenshots -->
+<section id="screenshots" class="alt">
+  <div class="container">
+    <p class="section-label">Screenshots</p>
+    <h2 class="section-title">See it in action</h2>
+    <p class="section-desc">
+      A quick tour of the app: from the lock screen to the editor, search, and settings.
+    </p>
+
+    <div class="screenshot-row">
+      <img src="i/main-lock-screen.png" alt="Lock screen with password entry">
+      <div class="text">
+        <h3>Secure Lock Screen</h3>
+        <p>
+          Your diary greets you with a clean lock screen. Enter your master password to access your entries.
+          The app auto-locks after inactivity so your thoughts stay private.
+        </p>
+      </div>
+    </div>
+
+    <div class="screenshot-row reverse">
+      <img src="i/entry.png" alt="Editor with calendar and rich text toolbar">
+      <div class="text">
+        <h3>Write Your Day</h3>
+        <p>
+          Select a date on the calendar and start writing. The rich text editor supports formatting,
+          headings, lists, and more. Content auto-saves as you type.
+        </p>
+      </div>
+    </div>
+
+    <div class="screenshot-row">
+      <img src="i/entry_font_and_list.png" alt="Formatted text with headings, colors, and bullet lists">
+      <div class="text">
+        <h3>Rich Formatting</h3>
+        <p>
+          Express yourself with bold headings, colored text, numbered lists, and bullet points.
+          The full toolbar puts every formatting option at your fingertips.
+        </p>
+      </div>
+    </div>
+
+    <div class="screenshot-row reverse">
+      <img src="i/multiple_photos.png" alt="Entry with multiple embedded photos">
+      <div class="text">
+        <h3>Photo Memories</h3>
+        <p>
+          Attach as many photos as you like. Images are embedded directly in the entry
+          so your visual memories live alongside your words.
+        </p>
+      </div>
+    </div>
+
+    <div class="screenshot-row">
+      <img src="i/list_search.png" alt="Search results showing all diary entries">
+      <div class="text">
+        <h3>Search &amp; Browse</h3>
+        <p>
+          Search across all entries by keyword, title, or date. The list view shows every entry
+          at a glance with date, title, and a content preview.
+        </p>
+      </div>
+    </div>
+
+    <div class="screenshot-row reverse">
+      <img src="i/settings.png" alt="Settings screen with security, data, and appearance options">
+      <div class="text">
+        <h3>Settings &amp; Security</h3>
+        <p>
+          Configure your password, lock timeout, data directory, and theme.
+          Everything is designed to be straightforward and accessible.
+        </p>
+      </div>
+    </div>
+
+    <div class="screenshot-row">
+      <img src="i/delete_entry.png" alt="Delete confirmation dialog">
+      <div class="text">
+        <h3>Safe Deletion</h3>
+        <p>
+          Deleting an entry requires explicit confirmation. No accidental deletions &mdash;
+          your memories are protected from mishaps.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Download -->
+<section id="download">
+  <div class="container">
+    <p class="section-label">Download</p>
+    <h2 class="section-title">Get Diary</h2>
+    <p class="section-desc">
+      Free to download and use. Available for all major desktop platforms.
+    </p>
+    <div class="download-grid">
+      <a href="files/diary-1.0.0-x86_64.AppImage" class="download-card" download>
+        <div class="os">&#x1F427;</div>
+        <h3>Linux</h3>
+        <p>Single-file portable executable. No installation required.</p>
+        <span class="format">AppImage &darr;</span>
+      </a>
+      <a href="files/diary-windows-x64-setup.exe" class="download-card" download>
+        <div class="os">&#x1FA9F;</div>
+        <h3>Windows</h3>
+        <p>Installer with Start Menu, desktop shortcut, and VC++ bundled.</p>
+        <span class="format">Setup.exe &darr;</span>
+      </a>
+      <a href="files/diary-macos.dmg" class="download-card" download>
+        <div class="os">&#x1F34E;</div>
+        <h3>macOS</h3>
+        <p>Drag-and-drop installer. Open the DMG and move to Applications.</p>
+        <span class="format">DMG &darr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- License / Shareware -->
+<section id="license" class="alt">
+  <div class="container">
+    <p class="section-label">License</p>
+    <h2 class="section-title">Shareware / Honorware Copyright Notice</h2>
+    <div class="license-box">
+      <p>Copyright &copy; 2026 Runable.app. All rights reserved.</p>
+      <p>This software is distributed as shareware (honorware). It is not public domain and not open source.</p>
+      <p>Permission is granted to copy and redistribute this software free of charge, provided that it is distributed only in its original, unmodified form and that no fee is charged for its distribution.</p>
+      <p>The software may be used without time limitation for personal, non-commercial purposes. Payment of a license fee is voluntary but encouraged to support continued development.</p>
+      <p>Commercial use of this software requires the purchase of a commercial license.</p>
+      <p>Modification, reverse engineering, decompilation, or redistribution of modified versions is strictly prohibited without prior written permission from the copyright holder.</p>
+      <p>This software is provided &ldquo;as is&rdquo;, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement.</p>
+      <p>In no event shall the copyright holder be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.</p>
+      <p>This copyright notice applies worldwide.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>
+    Diary v1.0.0 &mdash; Made with care by <a href="https://runable.app">Runable.app</a>
+  </p>
+</footer>
+
+</body>
+</html>
