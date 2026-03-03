@@ -1,0 +1,21 @@
+Shareware / Honorware Copyright Notice
+
+Copyright © 2026 Runable.app. All rights reserved.
+
+This software is distributed as shareware (honorware).
+It is not public domain and not open source.
+
+Permission is granted to copy and redistribute this software free of charge, provided that it is distributed only in its original, unmodified form and that no fee is charged for its distribution.
+
+The software may be used without time limitation for personal, non-commercial purposes.
+Payment of a license fee is voluntary but encouraged to support continued development.
+
+Commercial use of this software requires the purchase of a commercial license.
+
+Modification, reverse engineering, decompilation, or redistribution of modified versions is strictly prohibited without prior written permission from the copyright holder.
+
+This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement.
+
+In no event shall the copyright holder be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
+
+This copyright notice applies worldwide.
